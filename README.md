@@ -95,6 +95,6 @@ Example code:
 
  This module simulates drift in replicate populations/loci of three different sizes. The user can set these sizes, along with number of replicates, generations, and starting allele frequency.
 
-#### Example output:
+Example output:
 
 ![title](driftSimulation.png)
