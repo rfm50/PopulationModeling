@@ -97,4 +97,4 @@ Example code:
 
 #### Example output:
 
-![title](https://github.com/rfm50/PopulationModeling/blob/master/driftSimulation.png)
+![title](https://github.com/rfm50/PopulationModeling/blob/main/driftSimulation.png)
