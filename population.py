@@ -18,7 +18,7 @@ class Population():
             self.Aafreq = Aafreq
             self.aafreq = 1-AAfreq-Aafreq
         if mutation_rate:
-            self.theta = 4*twoN*mutation_rate
+            self.theta = 4*(twoN/2)*mutation_rate
 
     def get_hw_freqs(self):
         '''Get Hardy-Weinberg frequencies.'''
