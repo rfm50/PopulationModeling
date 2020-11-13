@@ -4,10 +4,10 @@ import numpy as np
 
 
 class Population():
-    '''Model a biological population.'''
+    """Model a biological population."""
 
     def __init__(self, pfreq, heterozygosity=None, AAfreq=None, Aafreq=None, twoN=100, mutation_rate=None):
-        '''Set allele and genotype frequencies.'''
+        """Set allele and genotype frequencies."""
         self.pfreq = pfreq
         self.qfreq = 1-pfreq
         self.twoN = twoN
@@ -21,26 +21,26 @@ class Population():
             self.theta = 4*(twoN/2)*mutation_rate
 
     def get_hw_freqs(self):
-        '''Get Hardy-Weinberg frequencies.'''
+        """Get Hardy-Weinberg frequencies."""
         hwFreqs = {'AA': round((self.pfreq)**2, 2),
                    'Aa': round(2*self.pfreq*self.qfreq, 2),
                    'aa': round((self.qfreq)**2, 2)}
         return hwFreqs
 
     def get_fixation_index(self):
-        '''Get fixation index.'''
+        """Get fixation index."""
         expectedH = 2*self.pfreq*self.qfreq
         observedH = self.Aafreq
         fixation_index = (expectedH-observedH)/expectedH
         return round(fixation_index, 2)
 
     def theta_hetero(self):
-        '''Calculate expected heterozygosity based on theta.'''
+        """Calculate expected heterozygosity based on theta."""
         thetaHetero = self.theta/(self.theta + 1)
         return thetaHetero
 
     def drift_sel_balance(self, selection):
-        '''See drift-selection balance.'''
+        """See drift-selection balance."""
         fourNeS = 4*self.twoN*selection
         if fourNeS > 1:
             return f'4Nes: {fourNeS}\n' \
@@ -53,13 +53,14 @@ class Population():
                 'Drift and selection are equal.'
 
     def prob_coalescence_discrete(self, t):
+        """Obtain the probability of coalescence given t discrete time intervals."""
         prob_not = (1-(1/self.twoN))**(t-1)
         prob_do = 1/self.twoN
         prob = prob_not*prob_do
         return round(prob, 4)
 
     def sim_drift(self, gens):
-        '''Simulate genetic drift, using a binomial distribution.'''
+        """Simulate genetic drift, using a binomial distribution."""
         init_freq = self.pfreq
         freqs_vector = [init_freq]
         for generation in np.arange(gens):
@@ -77,7 +78,7 @@ class Population():
 
 
     def get_mix_stats(self, otherPop):
-        '''Get F_IS, F_ST, and F_IT for two populations.'''
+        """Get F_IS, F_ST, and F_IT for two populations."""
         h_I1 = self.Aafreq
         h_I2 = otherPop.Aafreq
         h_I = (h_I1 + h_I2)/2
@@ -97,7 +98,7 @@ class Population():
         return structure
 
     def drift_geneFlow_balance(self, m):
-        '''See drift-geneFlow balance.'''
+        """See drift-geneFlow balance."""
         fourNem = 4*self.twoN*m
         if fourNem > 1:
             return f'4Nem: {fourNem}\n' \
@@ -110,12 +111,12 @@ class Population():
                 'Drift and gene flow are equal.'
 
     def future_hetero(self, t):
-        '''Get heterozygosity after one time period.'''
+        """Get heterozygosity after one time period."""
         newHetero = ((1-(1/self.twoN))**t)*self.Aafreq
         return round(newHetero, 4)
 
     def sim_selection(self, wAA, wAa, waa):
-        '''Simulate 1 generation of natural selection.'''
+        """Simulate 1 generation of natural selection."""
         numerator = (((self.pfreq)**2)*wAA) + ((self.pfreq*self.qfreq)*wAa)
         denominator = (((self.pfreq)**2)*wAA) + (2*(self.pfreq*self.qfreq)*wAa) + (((self.qfreq)**2)*waa)
         pt2 = numerator/denominator
@@ -125,7 +126,7 @@ class Population():
 
 
 def get_diseq_stats(g11, g12, g21, g22, p1=None, p2=None):
-    '''Get gametic disequilibrium coefficient, D, as well as r^2.'''
+    """Get gametic disequilibrium coefficient, D, as well as r^2."""
     D = (g11*g22)-(g12*g21)
     if p1 and p2:
         q1 = 1-p1
@@ -137,12 +138,12 @@ def get_diseq_stats(g11, g12, g21, g22, p1=None, p2=None):
         return f'D: {D:.4f}'
    
 def Ne_through_time(*args):
-    '''Obtain estimate of Ne by.'''
+    """Obtain estimate of Ne by."""
     Ne = statistics.harmonic_mean(*args)
     return Ne
 
 def solve_breeders(R=None, h2=None, S=None):
-    '''Solve the Breeder's equation given two variables.'''
+    """Solve the Breeder's equation given two variables."""
     if R and h2:
         S = R/h2
         return f'S: {S:.2f}'
@@ -154,17 +155,17 @@ def solve_breeders(R=None, h2=None, S=None):
         return f'R: {R:.2f}'
 
 def get_mean_fitness(pfreq, wAA, wAa, waa):
-    '''Get mean fitness.'''
+    """Get mean fitness."""
     meanFitness = (((pfreq)**2)*wAA) + (2*(pfreq*(1-pfreq)*wAa)) + (((1-pfreq)**2)*waa)
     return round(meanFitness, 4)
 
 def exp_growth(n0, r, t):
-    '''Get future size of population after exponential growth.'''
+    """Get future size of population after exponential growth."""
     futureSize = n0*math.exp(r*t)
     return round(futureSize)
 
 def inf_island_fst(Ne, m=None, t=None):
-    '''Get Fst in the infinite island model, given m or t.'''
+    """Get Fst in the infinite island model, given m or t."""
     if m:
         Fst = 1/((4*Ne*m)+1)
         return round(Fst, 4)
@@ -173,12 +174,12 @@ def inf_island_fst(Ne, m=None, t=None):
         return round(Fst, 4)
 
 def inf_island_Nem(Fst):
-    '''Get Nem in the infinite island model, given Fst.'''
+    """Get Nem in the infinite island model, given Fst."""
     Nem = (1/4)*((1/Fst)-1)
     return round(Nem, 2)
 
 def colony_fst(Fst, k, phi):
-    '''Get colony Fst.''' 
+    """Get colony Fst.""" 
     colonyFst = 1/(2*k)+(phi*(1-(1/(2*k)))*Fst)
     return round(colonyFst, 4)
 
