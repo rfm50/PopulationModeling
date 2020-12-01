@@ -21,7 +21,7 @@ class Population():
 
     @property
     def qfreq(self):
-        return 1-self.pfreq
+        return round(1-self.pfreq, 2)
 
     def get_hw_freqs(self):
         """Get Hardy-Weinberg frequencies."""
