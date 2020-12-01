@@ -9,7 +9,6 @@ class Population():
     def __init__(self, pfreq, heterozygosity=None, AAfreq=None, Aafreq=None, twoN=100, mutation_rate=None):
         """Set allele and genotype frequencies."""
         self.pfreq = pfreq
-        self.qfreq = 1-pfreq
         self.twoN = twoN
         if heterozygosity is not None:
             self.Aafreq = heterozygosity
@@ -19,6 +18,10 @@ class Population():
             self.aafreq = 1-AAfreq-Aafreq
         if mutation_rate:
             self.theta = 4*(twoN/2)*mutation_rate
+
+    @property
+    def qfreq(self):
+        return 1-self.pfreq
 
     def get_hw_freqs(self):
         """Get Hardy-Weinberg frequencies."""
