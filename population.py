@@ -6,7 +6,8 @@ import numpy as np
 class Population():
     """Model a biological population."""
 
-    def __init__(self, pfreq, heterozygosity=None, AAfreq=None, Aafreq=None, twoN=100, mutation_rate=None):
+    def __init__(self, pfreq, heterozygosity=None, AAfreq=None, Aafreq=None, twoN=100, mutation_rate=None,
+                 wAA=None, wAa=None, waa=None):
         """Set allele and genotype frequencies."""
         self.pfreq = pfreq
         self.twoN = twoN
@@ -16,6 +17,9 @@ class Population():
             self.AAfreq = AAfreq
             self.Aafreq = Aafreq
             self.aafreq = 1-AAfreq-Aafreq
+        self.wAA = wAA
+        self.wAa = wAa
+        self.waa = waa
         if mutation_rate:
             self.theta = 4*(twoN/2)*mutation_rate
 
@@ -118,10 +122,10 @@ class Population():
         newHetero = ((1-(1/self.twoN))**t)*self.Aafreq
         return round(newHetero, 4)
 
-    def sim_selection(self, wAA, wAa, waa):
+    def sim_selection(self):
         """Simulate 1 generation of natural selection."""
-        numerator = (((self.pfreq)**2)*wAA) + ((self.pfreq*self.qfreq)*wAa)
-        denominator = (((self.pfreq)**2)*wAA) + (2*(self.pfreq*self.qfreq)*wAa) + (((self.qfreq)**2)*waa)
+        numerator = (((self.pfreq)**2)*self.wAA) + ((self.pfreq*self.qfreq)*self.wAa)
+        denominator = (((self.pfreq)**2)*self.wAA) + (2*(self.pfreq*self.qfreq)*self.wAa) + (((self.qfreq)**2)*self.waa)
         pt2 = numerator/denominator
         delta_p = pt2-self.pfreq
         self.pfreq = round(pt2, 4)
