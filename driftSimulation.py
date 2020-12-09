@@ -30,7 +30,6 @@ def drift_simulator(NeSmall=10, NeMedium=100, NeLarge=1000, replicates=10,
                         p = newP
 
             pops.append(freqs)
-            p = startingFreq
 
         for pop in pops:
             axs[ind].plot(pop)
